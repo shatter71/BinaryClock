@@ -12,7 +12,7 @@
 #define LED_TYPE    WS2812B
 #define COLOR_ORDER RGB
 #define NUM_LEDS    24
-#define BRIGHTNESS  255
+//#define BRIGHTNESS  255
 #define NIGHT_MODE        1     //Set night mode where 0 is off and 1 is on (Night mode turns the clock off at night)
 #define WEEKEND_MODE      0     //Set weekend mode where 0 is off and 1 is on (Weekend mode turns the clock off on the weekends)
 #define NIGHT_OFF_TIME    22    //Time that clock turns off when night mode is active
@@ -30,15 +30,18 @@ int MIN_COLOR = 5;   //green
 int SEC_COLOR = 4;   //blue
 int COLOR_CHK = 0;
 int DST_MODE = 0;
+int BRIGHTNESS = 255;
+int TIME_CHK = 0;
+int TIME_CHK_DST = 0;
 
 Button BUTTON_HOUR = Button(PIN_BUTTON_HOUR,BUTTON_PULLUP_INTERNAL); //Setup button to adjust color of hour LEDs
-Button BUTTON_MIN = Button(PIN_BUTTON_MIN,BUTTON_PULLUP_INTERNAL); //Setup button to adjust color of hour LEDs
-Button BUTTON_SEC = Button(PIN_BUTTON_SEC,BUTTON_PULLUP_INTERNAL); //Setup button to adjust color of hour LEDs
+Button BUTTON_MIN = Button(PIN_BUTTON_MIN,BUTTON_PULLUP_INTERNAL); //Setup button to adjust color of minute LEDs
+Button BUTTON_SEC = Button(PIN_BUTTON_SEC,BUTTON_PULLUP_INTERNAL); //Setup button to adjust color of second LEDs
 Button BUTTON_DST = Button(PIN_BUTTON_DST,BUTTON_PULLUP_INTERNAL); //Setup button to turn on and off DST adjustment
 
 CRGB leds[NUM_LEDS];
 
-//Digits color values in RGB
+//Default HOUR, MIN, SEC color values in RGB when powering up
 int hrr = 255;
 int hrg = 0;
 int hrb = 0;
@@ -88,47 +91,6 @@ void setup() {
     .setDither(BRIGHTNESS < 255);
   FastLED.setBrightness(BRIGHTNESS);
 }
-
-//void pride() 
-//{
-//  static uint16_t sPseudotime = 0;
-//  static uint16_t sLastMillis = 0;
-//  static uint16_t sHue16 = 0;
-// 
-//  uint8_t sat8 = beatsin88( 87, 220, 250);
-//  uint8_t brightdepth = beatsin88( 341, 96, 224);
-//  uint16_t brightnessthetainc16 = beatsin88( 203, (25 * 256), (40 * 256));
-//  uint8_t msmultiplier = beatsin88(147, 23, 60);
-//
-//  uint16_t hue16 = sHue16;//gHue * 256;
-//  uint16_t hueinc16 = beatsin88(113, 1, 3000);
-//  
-//  uint16_t ms = millis();
-//  uint16_t deltams = ms - sLastMillis ;
-//  sLastMillis  = ms;
-//  sPseudotime += deltams * msmultiplier;
-//  sHue16 += deltams * beatsin88( 400, 5,9);
-//  uint16_t brightnesstheta16 = sPseudotime;
-//  
-//  for( uint16_t i = 0 ; i < NUM_LEDS; i++) {
-//    hue16 += hueinc16;
-//    uint8_t hue8 = hue16 / 256;
-//
-//    brightnesstheta16  += brightnessthetainc16;
-//    uint16_t b16 = sin16( brightnesstheta16  ) + 32768;
-//
-//    uint16_t bri16 = (uint32_t)((uint32_t)b16 * (uint32_t)b16) / 65536;
-//    uint8_t bri8 = (uint32_t)(((uint32_t)bri16) * brightdepth) / 65536;
-//    bri8 += (255 - brightdepth);
-//    
-//    CRGB newcolor = CHSV( hue8, sat8, bri8);
-//    
-//    uint16_t pixelnumber = i;
-//    pixelnumber = (NUM_LEDS-1) - pixelnumber;
-//    
-//    nblend( leds[pixelnumber], newcolor, 64);
-//  }
-//}
 
 /*------------------------------------Hour LEDs------------------------------------*/
 void hour0()
@@ -944,14 +906,14 @@ void loop()
 {
     time_t now = time(nullptr);
     struct tm* p_tm = localtime(&now);
-    Serial.print("-------------------------------------------------\n");
-    Serial.print("Date & Time : ");
-    Serial.print(p_tm->tm_mday);
-    Serial.print("/");
-    Serial.print(p_tm->tm_mon + 1);
-    Serial.print("/");
-    Serial.print(p_tm->tm_year + 1900);
-    Serial.print(" ");
+    //Serial.print("-------------------------------------------------\n");
+    //Serial.print("Date & Time : ");
+    //Serial.print(p_tm->tm_mday);
+    //Serial.print("/");
+    //Serial.print(p_tm->tm_mon + 1);
+    //Serial.print("/");
+    //Serial.print(p_tm->tm_year + 1900);
+    //Serial.print(" ");
     int hour=p_tm->tm_hour;
     if (DST_MODE == 0) {
       hour = hour;
@@ -964,16 +926,42 @@ void loop()
     int second=p_tm->tm_sec;
     int weekday=p_tm->tm_wday; //day of the week, range 0 to 6
 
-    // Check if we pressed the button to turn on or off DST mode
-    if (BUTTON_DST.uniquePress()) {
-      Serial.println("DST BUTTON PRESS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    // Check if we pressed the button for 5 seconds to turn on or off DST mode
+    //if (BUTTON_DST.uniquePress()) {
+    if (BUTTON_DST.heldFor(5000) && now > (TIME_CHK_DST + 4)) {  
+      //Serial.println("DST BUTTON PRESS!");
       if (DST_MODE == 0) {
         DST_MODE = 1;
       }
       else if (DST_MODE == 1) {
         DST_MODE = 0;
       }
+      TIME_CHK_DST = now;
+      if (BRIGHTNESS == 0) {
+        BRIGHTNESS = 255;
+      }
+      else
+      {
+        BRIGHTNESS = BRIGHTNESS - 64;
+      }	
     }
+
+    // Check if DST button is being held down for 2 seconds and brightness hasn't been adjusted since button held down for at least 2 seconds
+    if (BUTTON_DST.heldFor(100) && now > (TIME_CHK + 7)) {
+      //Serial.println("Brightness adjusted!");
+      BRIGHTNESS = BRIGHTNESS + 64;
+      if (BRIGHTNESS > 255) {
+        BRIGHTNESS = 0;
+      }
+      FastLED.setBrightness(BRIGHTNESS);
+      TIME_CHK = now;
+    }
+
+    // When DST button is released then reset brightness adjustment so it can be triggered again
+    //if (BUTTON_DST.wasPressed()) {
+    //  Serial.println("DST was pressed!");
+    //  BRIGHT_ADJ = 0;
+    //}
 
     // Check if we pressed the button to adjust the hour color...
     // Repeat the following loop for as long as we hold this button.
@@ -1011,10 +999,10 @@ void loop()
         hrb = 0;
         //Serial.println("RED");
       }
-      if (HOUR_COLOR == 2) { //yellow
-        hrr = 255;
+      if (HOUR_COLOR == 2) { //cyan
+        hrr = 0;
         hrg = 255;
-        hrb = 0;
+        hrb = 255;
         //Serial.println("YELLOW");
       }
       if (HOUR_COLOR == 3) { //white
@@ -1048,10 +1036,10 @@ void loop()
         mnb = 0;
         //Serial.println("RED");
       }
-      if (MIN_COLOR == 2) { //yellow
-        mnr = 255;
+      if (MIN_COLOR == 2) { //cyan
+        mnr = 0;
         mng = 255;
-        mnb = 0;
+        mnb = 255;
         //Serial.println("YELLOW");
       }
       if (MIN_COLOR == 3) { //white
@@ -1084,10 +1072,10 @@ void loop()
         scb = 0;
         //Serial.println("RED");
       }
-      if (SEC_COLOR == 2) { //yellow
-        scr = 255;
+      if (SEC_COLOR == 2) { //cyan
+        scr = 0;
         scg = 255;
-        scb = 0;
+        scb = 255;
         //Serial.println("YELLOW");
       }
       if (SEC_COLOR == 3) { //white
@@ -1114,7 +1102,7 @@ void loop()
         scb = 255;
         //Serial.println("PURPLE");
       }
-      
+            
     }
 
     if (NIGHT_MODE==1)
@@ -1143,8 +1131,11 @@ void loop()
 
     if (NIGHT_CHK == 1 || WEEKEND_CHK == 1)
     {
-      FastLED.clear();  // clear all pixel data
-      FastLED.show();
+      FastLED.setBrightness(0);
+    }
+    else
+    {
+      FastLED.setBrightness(BRIGHTNESS);
     }
 
     if (NIGHT_CHK == 0 && WEEKEND_CHK == 0)
@@ -1156,13 +1147,13 @@ void loop()
         hour=hour-12;
       }
     }
-    Serial.print(hour);
-    Serial.print(":");
-    Serial.print(minute);
-    Serial.print(":");
-    Serial.println(second);
+    //Serial.print(hour);
+    //Serial.print(":");
+    //Serial.print(minute);
+    //Serial.print(":");
+    //Serial.println(second);
     //Serial.println(p_tm->tm_sec);
-//    pride();
+
     if(hour==1)
     {
       hour1();
