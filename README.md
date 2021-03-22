@@ -12,10 +12,16 @@ Parts used:
 8. 5x7 glass plate (took mine from $1 picture frame on clearance)
 
 Wiring on ESP-12E:
-1. PIN_BUTTON_HOUR 14      //Set to GPIO PIN 14 
-2. PIN_BUTTON_MIN 12       //Set to GPIO PIN 12 
-3. PIN_BUTTON_SEC 13       //Set to GPIO PIN 13
-4. PIN_BUTTON_DST 5        //Set to GPIO PIN 5
+1. Wire one side of hour push button to GPIO PIN 14 (D5) and the other side to GND
+2. Wire one side of minute push button to GPIO PIN 12 (D6) and the other side to GND
+3. Wire one side of second push botton to GPIO PIN 13 (D7) and the other side to GND
+4. Wire one side of DST push button to GPIO PIN 5 (D1) and the other side to GND 
+5. Wire the LED data connection to the 470 ohm resistor and then to GPIO PIN 4 (D2)
+6. Wire power and ground lines from the barrel jack screw terminal to Vin and GND on the ESP-12E and wire the capacitor across the 5V and GND lines
+7. Wire power and ground lines from the barrel jack screw terminal to 5V and GND on the LED strip (LEDs are powered directly from the power supply and not by the ESP-12E)
+8. Cut the LED strips into four sections of 6 LEDs.  Wire the 5V, GND and Data lines from section to section while paying attention to the data flow arrows on the strips.  I placed the LED strips in the face plate and used that as the guide for how long to make each wire connecting one strip to the next.
+
+NOTE: I used a three wire plug between the ESP-12E data and POWER lines to the LED such that I can disconnec the LEDs when connecting the ESP-12E to the computer USB port for programming.
 
 Settings:
 1. #define NIGHT_MODE        1     //Set night mode where 0 is off and 1 is on (Night mode turns the clock off at night)
