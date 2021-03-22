@@ -5,10 +5,11 @@ Parts used:
 1. ESP8266 ESP-12E board
 2. WS2812B Black 60LED + IP30 not waterproof + 1m (12mm LED spacing and 10mm strip width) [24 LEDs needed in 4 strips of 6 LEDs]
 3. Four tact switches (push buttons)
-4. Resistor
-5. Capacitor
-6. Barrel power adapter
-7. 5x7 glass plate
+4. Through-Hole Resistor - 470 ohm 5% 1/4W
+5. 4700uF 10v Electrolytic Capacitor
+6. 3-pin JST SM Plug (plug into LEDs that came with one end of plug)
+7. Power adapter barrel jack to screw terminal 
+8. 5x7 glass plate (took mine from $1 picture frame on clearance)
 
 Wiring on ESP-12E:
 1. PIN_BUTTON_HOUR 14      //Set to GPIO PIN 14 
