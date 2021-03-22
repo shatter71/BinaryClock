@@ -11,17 +11,17 @@ Parts used:
 7. 5x7 glass plate
 
 Wiring on ESP-12E:
-PIN_BUTTON_HOUR 14      //Set to GPIO PIN 14 
-PIN_BUTTON_MIN 12       //Set to GPIO PIN 12 
-PIN_BUTTON_SEC 13       //Set to GPIO PIN 13
-PIN_BUTTON_DST 5        //Set to GPIO PIN 5
+1. PIN_BUTTON_HOUR 14      //Set to GPIO PIN 14 
+2. PIN_BUTTON_MIN 12       //Set to GPIO PIN 12 
+3. PIN_BUTTON_SEC 13       //Set to GPIO PIN 13
+4. PIN_BUTTON_DST 5        //Set to GPIO PIN 5
 
 Settings:
-#define NIGHT_MODE        1     //Set night mode where 0 is off and 1 is on (Night mode turns the clock off at night)
-#define WEEKEND_MODE      0     //Set weekend mode where 0 is off and 1 is on (Weekend mode turns the clock off on the weekends)
-#define NIGHT_OFF_TIME    22    //Time that clock turns off when night mode is active
-#define NIGHT_ON_TIME     7     //Time that clock turns on when night mode is active
-#define MILITARY_MODE     0     //Set 24HR mode where hour is shown as 1-23 rather than 1-12 where 0 = 1-12 mode and 1 = 1-23 mode
+1. #define NIGHT_MODE        1     //Set night mode where 0 is off and 1 is on (Night mode turns the clock off at night)
+2. #define WEEKEND_MODE      0     //Set weekend mode where 0 is off and 1 is on (Weekend mode turns the clock off on the weekends)
+3. #define NIGHT_OFF_TIME    22    //Time that clock turns off when night mode is active
+4. #define NIGHT_ON_TIME     7     //Time that clock turns on when night mode is active
+5. #define MILITARY_MODE     0     //Set 24HR mode where hour is shown as 1-23 rather than 1-12 where 0 = 1-12 mode and 1 = 1-23 mode
 
 Wifi Settings:
 1. Set SSID to your wifi network name
