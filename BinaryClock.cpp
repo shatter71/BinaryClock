@@ -86,7 +86,7 @@ void setup() {
   connectWifi();
   Serial.println();
   Serial.println("\n\nNext Loop-Step: " + String(millis()) + ":");
-  configTime(timezone, dst, "pool.ntp.org","time.nist.gov");
+  configTime(timezone, 0, "pool.ntp.org","time.nist.gov");
   FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS)
     .setCorrection(TypicalLEDStrip)
     .setDither(BRIGHTNESS < 255);
