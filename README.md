@@ -31,6 +31,7 @@ Settings:
 3. #define NIGHT_OFF_TIME    22    //Time that clock turns off when night mode is active
 4. #define NIGHT_ON_TIME     7     //Time that clock turns on when night mode is active
 5. #define MILITARY_MODE     0     //Set 24HR mode where hour is shown as 1-23 rather than 1-12 where 0 = 1-12 mode and 1 = 1-23 mode
+6. #define DST             1       //DST adjustment toggle (set 0 if you don't want auto adjust, 1 if you do)
 
 Wifi Settings:
 1. Set SSID to your wifi network name
