@@ -24,6 +24,7 @@ int WEEKEND_CHK = 0;            //Weekend mode toggle
 #define PIN_BUTTON_MIN 12       //Set to GPIO PIN 12 
 #define PIN_BUTTON_SEC 13       //Set to GPIO PIN 13
 #define PIN_BUTTON_DST 5        //Set to GPIO PIN 5
+#define DST             1       //DST adjustment toggle (set 0 if you don't want auto adjust, 1 if you do)
 
 int HOUR_COLOR = 1;  //red
 int MIN_COLOR = 5;   //green
@@ -906,48 +907,215 @@ void loop()
 {
     time_t now = time(nullptr);
     struct tm* p_tm = localtime(&now);
-    //Serial.print("-------------------------------------------------\n");
-    //Serial.print("Date & Time : ");
-    //Serial.print(p_tm->tm_mday);
-    //Serial.print("/");
-    //Serial.print(p_tm->tm_mon + 1);
-    //Serial.print("/");
-    //Serial.print(p_tm->tm_year + 1900);
-    //Serial.print(" ");
+    Serial.print("-------------------------------------------------\n");
+    Serial.print("Date & Time : ");
+    Serial.print(p_tm->tm_mday);
+    Serial.print("/");
+    Serial.print(p_tm->tm_mon + 1);
+    Serial.print("/");
+    Serial.print(p_tm->tm_year + 1900);
+    Serial.print(" DST ");
+    Serial.print(DST);
+    Serial.print(" DST_MODE ");
+    Serial.print(DST_MODE);
+    Serial.print(" ");
     int hour=p_tm->tm_hour;
-    if (DST_MODE == 0) {
-      hour = hour;
-    }
-    else if (DST_MODE == 1) {
-      hour = hour + 1;
-    }
-    //int hour=p_tm->tm_hour;
+    int month=p_tm->tm_mon;
+    int day=p_tm->tm_mday;
     int minute=p_tm->tm_min;
     int second=p_tm->tm_sec;
     int weekday=p_tm->tm_wday; //day of the week, range 0 to 6
 
-    // Check if we pressed the button for 5 seconds to turn on or off DST mode
-    //if (BUTTON_DST.uniquePress()) {
-    if (BUTTON_DST.heldFor(5000) && now > (TIME_CHK_DST + 4)) {  
-      //Serial.println("DST BUTTON PRESS!");
+    if (DST == 1) { 
       if (DST_MODE == 0) {
-        DST_MODE = 1;
+        hour = hour;
       }
       else if (DST_MODE == 1) {
-        DST_MODE = 0;
+        hour = hour + 1;
       }
-      TIME_CHK_DST = now;
-      if (BRIGHTNESS == 0) {
-        BRIGHTNESS = 255;
-      }
-      else
-      {
-        BRIGHTNESS = BRIGHTNESS - 64;
-      }	
     }
 
-    // Check if DST button is being held down for 2 seconds and brightness hasn't been adjusted since button held down for at least 2 seconds
-    if (BUTTON_DST.heldFor(100) && now > (TIME_CHK + 7)) {
+if (DST == 1) {
+  if (month > 3 && month < 11)
+      {
+       DST_MODE = 1;
+      }
+  else if (month == 3)
+      {
+       if (day > 14)
+           {
+            DST_MODE = 1;
+           } 
+       else if (day < 8)
+           {
+            DST_MODE = 0; 
+           }
+       else if (day == 8)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }   
+       else if (day == 9)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }   
+        else if (day == 10)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }   
+        else if (day == 11)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }   
+        else if (day == 12)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }   
+        else if (day == 13)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }
+                }
+             }  
+        else if (day == 14)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 1;
+                   }                 
+                }
+             }   
+         else
+             {
+              DST_MODE = 0;
+             }
+      } 
+  else if (month == 11)
+      {
+       if (day > 7)
+           {
+            DST_MODE = 0;
+           } 
+       else if (day == 1)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }   
+       else if (day == 2)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }   
+        else if (day == 3)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }   
+        else if (day == 4)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }   
+        else if (day == 5)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }   
+        else if (day == 6)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }
+                }
+             }  
+        else if (day == 7)
+             {
+              if (weekday == 1)
+                {
+                  if (hour > 1)
+                   {
+                    DST_MODE = 0;
+                   }                 
+                }
+             }   
+         else
+             {
+              DST_MODE = 1;
+             }
+      }
+}
+    Serial.print(hour);
+    Serial.print(":");
+    Serial.print(minute);
+    Serial.print(":");
+    Serial.println(p_tm->tm_sec);
+
+    // Adjust brightness on key press
+    //if (BUTTON_DST.heldFor(100) && now > (TIME_CHK + 7)) {
+    if (BUTTON_DST.uniquePress()) {
       //Serial.println("Brightness adjusted!");
       BRIGHTNESS = BRIGHTNESS + 64;
       if (BRIGHTNESS > 255) {
@@ -956,12 +1124,6 @@ void loop()
       FastLED.setBrightness(BRIGHTNESS);
       TIME_CHK = now;
     }
-
-    // When DST button is released then reset brightness adjustment so it can be triggered again
-    //if (BUTTON_DST.wasPressed()) {
-    //  Serial.println("DST was pressed!");
-    //  BRIGHT_ADJ = 0;
-    //}
 
     // Check if we pressed the button to adjust the hour color...
     // Repeat the following loop for as long as we hold this button.
@@ -1147,12 +1309,6 @@ void loop()
         hour=hour-12;
       }
     }
-    //Serial.print(hour);
-    //Serial.print(":");
-    //Serial.print(minute);
-    //Serial.print(":");
-    //Serial.println(second);
-    //Serial.println(p_tm->tm_sec);
 
     if(hour==1)
     {
