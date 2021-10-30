@@ -1,6 +1,8 @@
 # BinaryClock
  Binary clock using LEDs
 
+VERSION 2 IS PRODUCTION READY (Check Version 2 Branch) - AUTOMATING DAYLIGHT SAVINGS TIME AND CHANGING DST BUTTON TO ONLY HAVE DIMMING FUNCTION
+
 Parts used:
 1. ESP8266 ESP-12E board
 2. WS2812B Black 60LED + IP30 not waterproof + 1m (12mm LED spacing and 10mm strip width) [24 LEDs needed in 4 strips of 6 LEDs]
