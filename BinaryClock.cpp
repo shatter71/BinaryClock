@@ -921,10 +921,10 @@ void loop()
     Serial.print(" ");
     int hour=p_tm->tm_hour;
     int month=p_tm->tm_mon;
-    int day=p_tm->tm_mday;
+    int day=p_tm->tm_mday + 1;
     int minute=p_tm->tm_min;
     int second=p_tm->tm_sec;
-    int weekday=p_tm->tm_wday; //day of the week, range 0 to 6
+    int weekday=p_tm->tm_wday + 1; //day of the week, range 0 to 6
 
     if (DST == 1) { 
       if (DST_MODE == 0) {
