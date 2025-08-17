@@ -41,7 +41,7 @@ Wifi Settings:
 
 What the four buttons do:
 
-    DST Button (DUAL MODE) = (1) press to adjust brightness and (2) hold for 5 seconds to adjust hour forward and back by one hour for daylight savings time. Brightness can only be adjusted every 7 seconds to make the dual mode work. When holding down for 5 seconds to adjust DST, the brightness will be adjusted once but will adjust back to the prior setting when the DST is changed so don't worry if LEDs go off, they'll come back on when DST adjustment triggers.
+    Brightness Button = press to adjust brightness
     HOUR Button = cycle through six colors of the hour LEDs
     MIN Button = cycle through six colors of the minute LEDs
     SEC Button = cycle through six colors of the second LEDs
